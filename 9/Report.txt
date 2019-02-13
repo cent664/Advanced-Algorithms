@@ -1,0 +1,8 @@
+Branch and Bound Greedy and Hillclimbing Reverse stand out.
+
+Both have consistently more accuracy than the rest.
+
+Most consistent - I would say Branch and Bound Greedy is consistently the better algorithm.
+
+I would recommend Branch and Bound Greedy.
+

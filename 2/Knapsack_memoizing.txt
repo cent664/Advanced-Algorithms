@@ -1,0 +1,60 @@
+#include <iostream>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+int ar[200];
+bool cache[200][200][200];
+bool cacheValid[200][200][200];
+bool KnapMemo(int n,int l1,int l2)
+{
+    if(l1<0 || l2<0) //Base Case
+    {
+        return false;
+    }
+    if(l1==0 && l2==0) //Base Case
+    {
+        return true;
+    }
+    if(n<0) // at n=0 this recursive call is testing the last object at ar[0], to see if it fills the sacks or not
+    {
+        return false;
+    }
+    else
+    {
+        if (cacheValid[n][l1][l2] == true) // Checking if the value exists in cache
+        {
+            return cache[n][l1][l2]; //Return the value from cache
+        }
+        else
+        {
+            cache[n][l1][l2]=(KnapMemo(n-1,l1-ar[n],l2) || KnapMemo(n-1,l1,l2-ar[n]) || KnapMemo(n-1,l1,l2)); // Find out the value and store it in cache
+            return cache[n][l1][l2]; // Return the value
+        }
+    }
+}
+int main()
+{
+    int n,l1,l2,i;
+    cout<<"Enter the number of elements"<<endl; // Taking the object count as input
+    cin>>n;
+    cout<<"Enter the elements of the array"<<endl; // Taking the elements as input
+    for(i=0;i<n;i++)
+    {
+        cin>>ar[i];
+    }
+    cout<<"Enter the size of first knapsack"<<endl; // Taking the size of the 1st knapsack as input
+    cin>>l1;
+    cout<<"Enter the size of the second knapsack"<<endl; // Taking the size of the 2nd knapsack as input
+    cin>>l2;
+    bool res = KnapMemo(n,l1,l2); // Passing the object count and the knacpsack sizes, getting true or false in return
+    if(res)
+    {
+        cout<<"There exists a subset of the array that fits the knapsacks perfectly!"<<endl;
+    }
+    else
+    {
+        cout<<"There does not exist a subset of the array that fits the knapsacks perfectly :("<<endl;
+    }
+    return 0;
+}

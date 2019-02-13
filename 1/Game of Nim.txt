@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+bool win(int A, int B, int C)
+{
+    int i;
+	if (A==0 && B==0 && C==0)
+	{
+		return true;
+	}
+	for(i=1; i<=A; i++)
+	{
+		if(win(A-i, B, C) == false)
+		{
+			return true;
+		}
+	}
+	for(i=1; i<=B; i++)
+	{
+		if(win(A, B-i, C) == false)
+		{
+			return true;
+		}
+	}
+	for(i=1; i<=C; i++)
+	{
+		if(win(A, B, C-i) == false)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+int main()
+{
+    int A,B,C;
+    printf("Enter the size of the first pile:\n");
+    scanf("%d", &A);
+    printf("Enter the size of the second pile:\n");
+    scanf("%d", &B);
+    printf("Enter the size of the third pile:\n");
+    scanf("%d", &C);
+    bool w=false;
+    w = win(A, B, C);
+    if (w == true)
+    {
+        printf("\nYou can win!\n");
+    }
+    else
+    {
+        printf("\nYou can't win.\n");
+    }
+    return 0;
+}

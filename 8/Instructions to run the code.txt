@@ -1,0 +1,11 @@
+Each of the algorithms take:
+
+T(String to be searched)
+P(Pattern to search for)
+
+as input.
+
+Output:
+
+Number of matches
+Indexes where match was found.

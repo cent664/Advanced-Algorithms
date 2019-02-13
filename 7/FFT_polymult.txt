@@ -1,0 +1,106 @@
+import math
+import random
+import time
+
+def FFT(P,V,n):
+    if n==1: # Base Case
+        return [P[0]]
+    else:
+        Peven = [0] * (n // 2)
+        Podd = [0] * (n // 2)
+        for i in range (0,n//2):
+            Peven[i] = P[2*i]   # dividing the list in even terms
+            Podd[i] = P[(2*i)+1]   # dividing the list in odd terms
+
+        Vsquared = [0] * (n // 2)
+        for i in range (0,n//2):
+            Vsquared[i] = V[i] * V[i] # squaring the values of omega
+
+        # finding the FFT result of even and odd coefficients
+        Sole = FFT(Peven, Vsquared, n//2)
+        Solo = FFT(Podd, Vsquared, n//2)
+
+        Sol = [0] * (n)
+        for i in range (0,n//2): # solution construction
+            Sol[i] = Sole[i] + V[i] * Solo[i]
+            Sol[i+(n//2)] = Sole[i] - V[i] * Solo[i]
+        return Sol
+
+def W(n): # function to compute the values of omega
+    V = [0]*(n)
+    for i in range (0,n):
+        V[i] = complex((math.cos(2*math.pi*i/n)),math.sin(2*math.pi*i/n))
+    return V
+
+if __name__ == '__main__': # main
+    n = 32
+    ft = open("time.txt", "w")
+    while (n<=65536): # loop for n
+        sum = 0
+        ft.write("n=")
+        ft.write(str(n))
+        ft.write("  ")
+
+        # creating the list of omega
+        V = W(n)
+
+        for z in range(0,10): # 10 test cases
+
+            start = time.time()
+
+            P = [0] * (n)
+            Q = [0] * (n)
+            for i in range (0,n//2): # randomizing the values of P & Q
+                P[i] = random.uniform(-1.0,1.0)
+                Q[i] = random.uniform(-1.0,1.0)
+                P[i+n//2]=0 # Padding the values of P and Q
+                Q[i+n//2]=0
+
+            # creating the list of inverse omega
+            Vin = [0] * (n)
+            for i in range(1, n):
+                Vin[i] = 1 / V[i]
+
+            # Computing FFT of P and Q
+            SolP = FFT(P,V,n)
+            SolQ = FFT(Q,V,n)
+
+            # Interpolating the value of PQ from P and Q
+            SolPQ = [0] * n
+            for i in range (0,n):
+                SolPQ[i] = SolP[i]*SolQ[i]
+
+            # Getting back the value of PQ from its FFT
+            PQ = FFT(SolPQ,Vin,n)
+
+            f = open("test.txt", "w")
+            for i in range (0,n): #displaying the solution
+                PQ[i] = PQ[i]/n
+                if PQ[i].real > 0:
+                    f.write("+")
+                    f.write(str(PQ[i].real))
+                    f.write("x^")
+                    f.write(str(i))
+                    f.write(" ")
+                if PQ[i].real < 0:
+                    f.write(str(PQ[i].real))
+                    f.write("x^")
+                    f.write(str(i))
+                    f.write(" ")
+            end = time.time()
+            f.close()
+
+            t = end - start # runtime
+            sum = sum + t
+
+        n = n * 2
+        av = sum/10 #Average of 10 runtimes
+        ft.write("average_t=")
+        ft.write(str(av))
+        ft.write(str("    "))
+        ft.write("log n=")
+        ft.write(str(math.log(n/2) / math.log(10)))
+        ft.write(str("    "))
+        ft.write("log average_t=")
+        ft.write(str(math.log(av+0.0000000001)/ math.log(10)))
+        ft.write("\n")

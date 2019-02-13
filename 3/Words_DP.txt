@@ -1,0 +1,70 @@
+#include <iostream>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+string d[200];
+string str;
+int n;
+bool check(int l)
+{
+    int i,j,c=0;/*
+    if(l<0)
+        return true;
+    for (i=l;i>=0;i--)
+    {
+        std::string substring = str.substr (i,l-i+1);
+        for (j=0;j<n;j++)
+        {
+            if (substring == d[j])
+                c++;
+        }
+        if (c>0)
+            return check(i-1);
+    }
+    return false;*/
+    bool cache[l+1];
+    for (i=l;i>=0;i--)
+    {
+        std::string substring = str.substr (i,l-i+1);
+        for (j=0;j<n;j++)
+        {
+            if (substring == d[j])
+                c++;
+        }
+        if (c>0)
+        {
+            cache[i]=true;
+            l=i-1;
+            c=0;
+        }
+    }
+    if (cache[l+1]==true)
+        return true;
+    else
+        return false;
+}
+int main()
+{
+    int len,i;
+    string s;
+    bool res;
+    cout<<"Enter the string to be checked"<<endl;
+    cin>>s;
+    str = s;
+    len = s.length();
+    cout<<"Enter the number of words in the dictionary"<<endl;
+    cin>>n;
+    cout<<"Enter the words in the dictionary"<<endl;
+    for(i=0;i<n;i++)
+    {
+        cin>>d[i];
+    }
+    res = check(len-1);
+    if(res == true)
+        cout<<"There exists an exact subset in the dictionary"<<endl;
+    else
+        cout<<"There does not exist an exact subset in the dictionary"<<endl;
+    return 0;
+}
+

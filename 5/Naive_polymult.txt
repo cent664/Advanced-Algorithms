@@ -1,0 +1,56 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+int n=32; //sample input size
+
+void poly(double coeff1[],double coeff2[]) // function to find the product polynomial
+{
+    int i,j;
+    double res[2*n]; // array to store the product polynomial
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            res[i+j]=res[i+j]+(coeff1[i]*coeff2[j]);
+        }
+    }
+    cout<<"Product Polynomial:"<<endl;
+    for(i=0;i<(2*n)-1;i++)
+    {
+        if(res[i]>0)
+            cout<<"+"<<res[i]<<"x^"<<i<<" "; //Displaying the positive values of the result array
+        if(res[i]<0)
+            cout<<res[i]<<"x^"<<i<<" "; //Displaying the negative values of the result array
+    }
+}
+
+int main()
+{
+    int i;
+    double val;
+    srand(time(NULL));
+    double coeff1[n],coeff2[n]; // Declaring the two input arrays to store the polynomials
+
+    for(i=0;i<n;i++) // Generating random double values for first polynomial
+    {
+        val = (double)rand()/RAND_MAX;
+        if (rand()%2==0)
+            coeff1[i]=val; // Randomizing positive values
+        else
+            coeff1[i]=-1*val; // Randomizing negative values
+    }
+
+    for(i=0;i<n;i++)// Generating random double values for second polynomial
+    {
+        val = (double)rand()/RAND_MAX;
+        if (rand()%2==0)
+            coeff2[i]=val; // Randomizing positive values
+        else
+            coeff2[i]=-1*val; // Randomizing negative values
+    }
+
+    poly(coeff1,coeff2); // Calling function poly to find the product
+
+    return 0;
+}

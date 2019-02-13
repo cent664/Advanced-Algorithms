@@ -1,0 +1,12 @@
+On execution, user has to input:
+
+the size of the object case (n)
+n number of elements
+1st knapsack size (l1)
+2nd knapsack size (l2)
+
+Output:
+
+Either - "There exists a subset of the array that fits the knapsacks perfectly!"
+
+OR - "There does not exist a subset of the array that fits the knapsacks perfectly :("

@@ -1,0 +1,58 @@
+#include <iostream>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+int ar[200];
+bool cache[200][200][200];
+bool cacheValid[200][200][200];
+bool KnapMemo(int n,int l1,int l2)
+{
+    if(l1<0 || l2<0)
+    {
+        return false;
+    }
+    if(l1==0 && l2==0)
+    {
+        return true;
+    }
+    if(n<0) // at n=0 this recursive call is testing the last object at ar[0], to see if it fills the sacks or not
+    {
+        return false;
+    }
+    else
+    {
+        if (cacheValid[n][l1][l2] == true)
+        {
+            return cache[n][l1][l2];
+        }
+        else
+        {
+            cache[n][l1][l2]=(KnapMemo(n-1,l1-ar[n],l2) || KnapMemo(n-1,l1,l2-ar[n]) || KnapMemo(n-1,l1,l2));
+            return cache[n][l1][l2];
+        }
+    }
+}
+int main()
+{
+    int n,m,l1=100,l2=100,i,x;
+    cout<<"Enter the number of elements"<<endl;
+    cin>>n;
+    cout<<"Enter the bound of the elements"<<endl;
+    cin>>m;
+    srand(time(NULL));
+    for(i=0;i<n;i++)
+    {
+        ar[i]=1+(rand()%(m-1));
+    }
+    bool res = KnapMemo(n,l1,l2);
+    if(res)
+    {
+        cout<<"There exists a subset of the array that fits the knapsacks perfectly!"<<endl;
+    }
+    else
+    {
+        cout<<"There does not exist a subset of the array that fits the knapsacks perfectly :("<<endl;
+    }
+    return 0;
+}

@@ -1,0 +1,99 @@
+#include <iostream>
+#include <fstream>
+#include <string.h>
+using namespace std;
+string A; // 1st Input string
+string B; // 2nd Input string
+int cache[20000][20000]; // Cache to store the DP solution
+int dict[96][96]; // Dictionary to store the matching values
+ofstream fout;
+
+int s(int n, int m) // DP function
+{
+    int c=5,sum=0,i,j;
+    for(j=1;j<=m;j++) // Base case - matching all the remaining characters of B vs gaps
+    {
+        sum=sum+dict['_'][B[j-1]];
+        cache[0][j]=sum; // A is null
+    }
+    sum=0;
+    for(i=1;i<=n;i++) // Base case - matching all the remaining characters of A vs gaps
+    {
+        sum=sum+dict[A[i-1]]['_'];
+        cache[i][0]=sum; // B is null
+    }
+    cache[0][0]=0; // Base case - matching gap vs gap
+    for(i=1;i<=n;i++)
+    {
+        for(j=1;j<=m;j++)
+        {
+            c=5; // Default value of c=5 for a match (if the two characters are the same)
+            int left = dict[A[i-1]]['_']; // Computing alignment score of last character of A vs gap(_)
+            int right = dict['_'][B[j-1]]; // Computing alignment score of last character of B vs gap(_)
+            if (A[i-1]!=B[j-1])
+                c=dict[A[i-1]][B[j-1]]; // Replacing value of c with alignment score of last char of A vs last char of B
+            cache[i][j] = max(max((left+cache[i-1][j]),(right+cache[i][j-1])),(c+cache[i-1][j-1]));
+        } // Allocates the max value of the 3 cases to the cache
+    }
+    return cache[n][m]; // Returning the alignment score
+}
+
+void in() // Function to initialize values of the dictionary
+{
+    dict['A']['A']=5;
+    dict['A']['C']=-1;
+    dict['A']['G']=-2;
+    dict['A']['T']=-1;
+    dict['A']['_']=-3;
+
+    dict['C']['A']=-1;
+    dict['C']['C']=5;
+    dict['C']['G']=-3;
+    dict['C']['T']=-2;
+    dict['C']['_']=-4;
+
+    dict['G']['A']=-2;
+    dict['G']['C']=-3;
+    dict['G']['G']=5;
+    dict['G']['T']=-2;
+    dict['G']['_']=-2;
+
+    dict['T']['A']=-1;
+    dict['T']['C']=-2;
+    dict['T']['G']=-2;
+    dict['T']['T']=5;
+    dict['T']['_']=-1;
+
+    dict['_']['A']=-3;
+    dict['_']['C']=-4;
+    dict['_']['G']=-2;
+    dict['_']['T']=-1;
+    dict['_']['_']=0;
+}
+
+int main() // Main
+{
+    int n,m;
+
+    in(); // Calling the function to initialize the dictionary
+
+    ifstream fin1;
+    fin1.open("Prototypical_human.txt");
+    fin1>>A; //1st input from text file containing the DNA sequence
+    fin1.close();
+
+    ifstream fin2;
+    fin2.open("Neanderthal.txt");
+    fin2>>B; //2nd input from text file containing the DNA sequence
+    fin2.close();
+
+    n=A.length();
+    m=B.length();
+
+    fout.open("Output.txt"); // Stores the output in file Output.txt
+    int score = s(n,m); // To find out the alignment score
+    fout<<"Alignment score = "<<score;
+    fout.close();
+
+    return 0;
+}

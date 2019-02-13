@@ -1,0 +1,118 @@
+#include <iostream>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+using namespace std;
+string A;
+string B;
+int cache[200][200];
+string key1[200];
+string key2[200];
+int k=0;
+void traceback(int n, int m)
+{
+    int i,j,c;
+    if (m==0&&n==0)
+        return;
+    if (n==0)
+    {
+        for(j=m-1;j>=0;j--)
+        {
+            std::string lastofB = B.substr (j,1);
+            key1[k]="_";
+            key2[k]=lastofB;
+            k++;
+        }
+        return;
+    }
+    if (m==0)
+    {
+        for(i=n-1;i>=0;i--)
+        {
+            std::string lastofA = A.substr (i,1);
+            key1[k]=lastofA;
+            key2[k]="_";
+            k++;
+        }
+        return;
+    }
+    if (cache[n][m]==(1+cache[n-1][m]))
+    {
+        std::string lastofA = A.substr (n-1,1);
+        key1[k]=lastofA;
+        key2[k]="_";
+        k++;
+        return traceback(n-1,m);
+    }
+    if (cache[n][m]==(1+cache[n][m-1]))
+    {
+        std::string lastofB = B.substr (m-1,1);
+        key1[k]="_";
+        key2[k]=lastofB;
+        k++;
+        return traceback(n,m-1);
+    }
+    if (cache[n][m]==(1+cache[n-1][m-1]))
+    {
+        std::string lastofA = A.substr (n-1,1);
+        std::string lastofB = B.substr (m-1,1);
+        key1[k]=lastofA;
+        key2[k]=lastofB;
+        k++;
+        return traceback(n-1,m-1);
+    }
+    if (cache[n][m]==(cache[n-1][m-1]))
+    {
+        std::string lastofA = A.substr (n-1,1);
+        std::string lastofB = B.substr (m-1,1);
+        key1[k]=lastofA;
+        key2[k]=lastofB;
+        k++;
+        return traceback(n-1,m-1);
+    }
+}
+int s(int n, int m)
+{
+    int i,j,c;
+    for(i=0;i<=n;i++)
+    {
+        for(j=0;j<=m;j++)
+        {
+            if(i==0)
+                cache[i][j]=j;
+            if(j==0)
+                cache[i][j]=i;
+        }
+    }
+    for(i=1;i<=n;i++)
+    {
+        for(j=1;j<=m;j++)
+        {
+            c=0;
+            std::string lastofA = A.substr (i-1,1);
+            std::string lastofB = B.substr (j-1,1);
+            if (lastofA!=lastofB)
+                c=1;
+            cache[i][j] = min(min((1+cache[i-1][j]),(1+cache[i][j-1])),(c+cache[i-1][j-1]));
+        }
+    }
+    return cache[n][m];
+}
+int main()
+{
+    int n,m,i;
+    cout<<"Enter the first string"<<endl;
+    cin>>A;
+    cout<<"Enter the second string"<<endl;
+    cin>>B;
+    n=A.length();
+    m=B.length();
+    int minED = s(n,m);
+    traceback(n,m);
+    cout<<"The minimum number of edits needed = "<<minED<<endl;
+    cout<<"Edits made:"<<endl;
+    for(i=0;i<k;i++)
+        cout<<key1[i]<<"-"<<key2[i]<<endl;
+    return 0;
+}

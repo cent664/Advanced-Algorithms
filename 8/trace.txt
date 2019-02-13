@@ -1,0 +1,89 @@
+NAIVE ALGORITHM:
+
+INPUT: T and P
+
+T used:
+
+fatfat664
+f
+asoifgjbofjasoidfjoidfjas
+
+
+P used:
+
+fat
+z
+as
+
+
+Resective OUTPUT:
+
+Number of matches found : 3
+Indexes in main string where matches were found :[0, 3, 6]
+
+Number of matches found : 0
+
+Number of matches found : 3
+Indexes in main string where matches were found :[0, 11, 23]
+
+----------------------------------------------------------------
+
+KMP ALGORITHM:
+
+INPUT: T and P
+
+T used:
+
+fatfat664
+f
+asoifgjbofjasoidfjoidfjas
+
+
+P used:
+
+fat
+z
+as
+
+
+Resective OUTPUT:
+
+Number of matches found : 3
+Indexes in main string where matches were found :[0, 3, 6]
+
+Number of matches found : 0
+
+Number of matches found : 3
+Indexes in main string where matches were found :[0, 11, 23]
+
+----------------------------------------------------------------
+
+BM ALGORITHM:
+
+INPUT: T and P
+
+T used:
+
+fatfat664
+f
+asoifgjbofjasoidfjoidfjas
+
+
+P used:
+
+fat
+z
+as
+
+
+Resective OUTPUT:
+
+Number of matches found : 3
+Indexes in main string where matches were found :[0, 3, 6]
+
+Number of matches found : 0
+
+Number of matches found : 3
+Indexes in main string where matches were found :[0, 11, 23]
+
+----------------------------------------------------------------

@@ -1,0 +1,105 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+#include <vector>
+#include <algorithm>
+#include <cstdlib>
+using namespace std;
+
+vector<double> mult(const vector<double> &P,const vector<double> &Q) // function to find the product polynomial
+{
+    int i;
+    size_t l = P.size();
+    vector<double> PL(l/2);
+    vector<double> PR(l/2);
+    vector<double> QL(l/2);
+    vector<double> QR(l/2);
+    if(l==1)
+    {
+        vector<double> temp(1,P[0]*Q[0]);
+        return temp;
+    }
+    for(i=0;i<l/2;i++) // Initializing PL,PR,QL,QR
+    {
+        PL[i]=P[i];
+        PR[i]=P[i+(l/2)];
+        QL[i]=Q[i];
+        QR[i]=Q[i+(l/2)];
+    }
+    vector<double> A=mult(PL,QL); //multiplying A=PL*QL
+    vector<double> D=mult(PR,QR); //multiplying A=PR*QR
+    vector<double> PLplusPR(l/2);
+    vector<double> QLplusQR(l/2);
+    for(i=0;i<l/2;i++) // Initializing PL+PR and QL+QR
+    {
+        PLplusPR[i]=PL[i]+PR[i];
+        QLplusQR[i]=QL[i]+QR[i];
+    }
+    vector<double> E=mult(PLplusPR,QLplusQR); // Multiplying E=(PL+PR)(QL+QR)
+    vector<double> BplusC(l-1);
+    for(i=0;i<(l-1);i++)
+    {
+        BplusC[i]=E[i]-A[i]-D[i]; // B+C=(PL+PR)(QL+QR)-PLQL-PRQR
+    }
+    vector<double> R((2*l)-1);// array to store the product polynomial
+    for(i=0;i<(l-1);i++) //Storing the output array
+    {
+        R[i]+=A[i];
+        R[i+(l/2)]+=BplusC[i];
+        R[i+l]+=D[i];
+    }
+    return R;
+}
+
+int main()
+{
+    int i,n,coeff;
+
+    cout<<"Enter the number of terms of the polynomials"<<endl;
+    cin>>n;
+    vector<double> P(n); // Declaring the two input arrays to store the polynomials
+    vector<double> Q(n);
+    cout<<"Enter the coefficients of the first:"<<endl;
+    for(i=0;i<n;i++)
+    {
+        cin>>coeff;
+        P[i]=P[i]+coeff;
+    }
+    cout<<"Enter the coefficients of the second:"<<endl;
+    for(i=0;i<n;i++)
+    {
+        cin>>coeff;
+        Q[i]=Q[i]+coeff;
+    }
+
+    cout<<endl;
+    vector<double> R=mult(P,Q);
+
+    cout<<"1st Polynomial = ";
+    for(i=0;i<n;i++)
+    {
+        if(P[i]>0)
+            cout<<"+"<<P[i]<<"x^"<<i<<" ";
+        if(P[i]<0)
+            cout<<P[i]<<"x^"<<i<<" ";
+    }
+    cout<<endl;
+    cout<<"2nd Polynomial = ";
+    for(i=0;i<n;i++)
+    {
+        if(Q[i]>0)
+            cout<<"+"<<Q[i]<<"x^"<<i<<" ";
+        if(Q[i]<0)
+            cout<<Q[i]<<"x^"<<i<<" ";
+    }
+    cout<<endl;
+    cout<<"Product = ";
+    for(i=0;i<(2*n)-1;i++)
+    {
+        if(R[i]>0)
+            cout<<"+"<<R[i]<<"x^"<<i<<" ";
+        if(R[i]<0)
+            cout<<R[i]<<"x^"<<i<<" ";
+    }
+    return 0;
+}

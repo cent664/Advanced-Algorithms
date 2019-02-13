@@ -1,0 +1,91 @@
+#include <iostream>
+#include <fstream>
+#include <string.h>
+using namespace std;
+string A;
+string B;
+int cache[20000][20000];
+int dict[96][96];
+ofstream fout;
+
+int s(int n, int m)
+{
+    int c=5,sum=0,i,j;
+    if (n==0 && m==0)
+        return 0;
+    if (n==0)
+    {
+        for(j=0;j<m;j++)
+        {
+            sum = sum + dict['_'][B[j]];
+        }
+        return sum;
+    }
+    if (m==0)
+    {
+        for(i=0;i<n;i++)
+        {
+            sum = sum + dict[A[i]]['_'];
+        }
+        return sum;
+    }
+    int left = dict[A[n-1]]['_'];
+    int right = dict['_'][B[m-1]];
+        if (A[n-1]!=B[m-1])
+            c=dict[A[n-1]][B[m-1]];
+    return max(max((left+s(n-1,m)),(right+s(n,m-1))),(c+s(n-1,m-1)));
+}
+
+void in()
+{
+    dict['A']['A']=5;
+    dict['A']['C']=-1;
+    dict['A']['G']=-2;
+    dict['A']['T']=-1;
+    dict['A']['_']=-3;
+
+    dict['C']['A']=-1;
+    dict['C']['C']=5;
+    dict['C']['G']=-3;
+    dict['C']['T']=-2;
+    dict['C']['_']=-4;
+
+    dict['G']['A']=-2;
+    dict['G']['C']=-3;
+    dict['G']['G']=5;
+    dict['G']['T']=-2;
+    dict['G']['_']=-2;
+
+    dict['T']['A']=-1;
+    dict['T']['C']=-2;
+    dict['T']['G']=-2;
+    dict['T']['T']=5;
+    dict['T']['_']=-1;
+
+    dict['_']['A']=-3;
+    dict['_']['C']=-4;
+    dict['_']['G']=-2;
+    dict['_']['T']=-1;
+    dict['_']['_']=0;
+}
+
+int main()
+{
+    int n,m;
+    in();
+
+    cout<<"Enter the first string"<<endl;
+    cin>>A;
+    cout<<"Enter the second string"<<endl;
+    cin>>B;
+
+    n=A.length();
+    m=B.length();
+
+    fout.open("Output.txt");
+    int score = s(n,m);
+    fout<<"Score = "<<score;
+    fout.close();
+
+    return 0;
+}

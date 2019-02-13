@@ -1,0 +1,6 @@
+The program takes input 'n' as the number of terms in each polynomial.
+'n' is declared as a global variable and is assigned values to do the empirical study.
+
+Enter the value of 'n' as you like to multiply two polynomials each of size 'n' having randomized double coefficents within the range [-1,1].
+
+Output: The product polynomial.

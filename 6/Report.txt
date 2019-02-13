@@ -1,0 +1,3 @@
+The value of n I've got where the lines cross is 2048.
+
+The significance of n is that, the Divide and Conquer algorithm is only better than the School Book algorithm at values above 2048.

@@ -1,0 +1,36 @@
+#include <iostream>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+int w[200];
+int v[200];
+int maxR(int L, int n)
+{
+    if (L==0||n==0)
+        return 0;
+    if((L-w[n])>=0)
+        return max((v[n] + maxR(L-w[n],n-1)), maxR(L,n-1));
+    return maxR(L,n-1);
+}
+int main()
+{
+    int n,l,i;
+    cout<<"Enter the robber's capacity"<<endl;
+    cin>>l;
+    cout<<"Enter the number of objects"<<endl;
+    cin>>n;
+    cout<<"Enter the weight of the objects"<<endl;
+    for(i=1;i<=n;i++)
+    {
+        cin>>w[i];
+    }
+    cout<<"Enter the value of the objects"<<endl;
+    for(i=1;i<=n;i++)
+    {
+        cin>>v[i];
+    }
+    int maxval = maxR(l,n);
+    cout<<"The maximum value stolen by the robber = "<<maxval<<endl;
+    return 0;
+}

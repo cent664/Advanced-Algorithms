@@ -1,0 +1,15 @@
+T = input string
+P = Search string
+
+
+The naive algorithm is the worst in all 4 cases, since it has to scan the entire file everytime.
+
+The KMP algorithm is better in the binary string, for both p = 0.5 and 0.99, because KMP looks for repeating patterns in the search strings, and the binary texts consisting of 0's and 1's, have a high probability of getting repeating patterns, which makes the algorithm shift control forward while scanning quite often.
+
+The BM algorithm is far better in shakespeare's, since BM searches for mismatched characters, and given the large pool for characters in the text, it is very likely that the mismatched character will not be present in the prefix of P, making the algorithm shift control forward while scanning quite often.
+
+To summarize:
+
+For: Binary(0.5 and 0.99), KMP is the best. (More repeating patterns = more skips)
+For: Shakespeare, BM is the best. (More chance of mismatched character not being in the prefix of P due to large pool for characters used in the string = more skips)
+For: BM does far better at large sample sizes. I'm guessing is because it has less overhead than the KMP algorithm, which has to fill in the cache everytime, vs the BM, which just maps the dictionary.
